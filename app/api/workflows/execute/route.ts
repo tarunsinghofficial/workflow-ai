@@ -24,7 +24,7 @@ async function ensureUser(clerkId: string) {
             });
         } catch (err: unknown) {
             if (err && typeof err === 'object' && 'code' in err && (err as { code: string }).code === 'P2002') {
-                user = await prisma.user.findUnique({ where: { clerkId } }) ?? undefined;
+                user = await prisma.user.findUnique({ where: { clerkId } }) ?? null;
             }
             if (!user) throw err;
         }
