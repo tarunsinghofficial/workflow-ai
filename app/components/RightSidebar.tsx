@@ -35,7 +35,7 @@ interface RightSidebarProps {
 }
 
 export function RightSidebar({ workflowId }: RightSidebarProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [selectedRun, setSelectedRun] = useState<string | null>(null);
   const [workflowRuns, setWorkflowRuns] = useState<WorkflowRun[]>([]);
   const [isLoading, setIsLoading] = useState(false);

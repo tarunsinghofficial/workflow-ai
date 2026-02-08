@@ -15,5 +15,14 @@ export default defineConfig({
             randomize: true,
         },
     },
+    build: {
+        extensions: [
+            {
+                name: "ffmpeg",
+                type: "aptGet" as const,
+                pkgs: ["ffmpeg"],
+            },
+        ],
+    },
     dirs: ["bg-tasks"],
 });

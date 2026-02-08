@@ -17,7 +17,8 @@ import {
   Download,
   Eye,
   Box,
-  Sparkles
+  Sparkles,
+  LogOut
 } from 'lucide-react';
 
 interface NodeType {
@@ -104,6 +105,25 @@ export function LeftSidebar() {
           <NavItem icon={Video} label="Video" id="video" />
           <NavItem icon={Box} label="Components" id="components" />
           <NavItem icon={Sparkles} label="Presets" id="presets" />
+        </div>
+
+        {/* Logout Button at Bottom */}
+        <div className="mt-auto">
+          <div className="relative flex items-center group">
+            <button
+              onClick={() => {
+                window.location.href = '/api/auth/signout';
+              }}
+              className="p-3 rounded-md transition-all duration-200 text-[#CDCDCE] hover:bg-red-500/10 hover:text-red-400"
+            >
+              <LogOut className="w-4.5 h-4.5" />
+            </button>
+
+            {/* Tooltip */}
+            <div className="absolute left-[70px] px-1 py-1 bg-[#2B2B2F] text-white text-xs font-medium rounded-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 border border-white/5 shadow-xl translate-x-1 group-hover:translate-x-0">
+              Logout
+            </div>
+          </div>
         </div>
 
       </div>
