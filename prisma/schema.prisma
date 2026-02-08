@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  clerkId       String    @unique
+  email         String?
+  name          String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  workflows     Workflow[]
+  workflowRuns  WorkflowRun[]
+}
+
+model Workflow {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  nodes       Json     // React Flow nodes data
+  edges       Json     // React Flow edges data
+  viewport    Json?    // React Flow viewport state
+  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  workflowRuns WorkflowRun[]
+}
+
+model WorkflowRun {
+  id          String      @id @default(cuid())
+  status      RunStatus   @default(PENDING)
+  scope       RunScope    @default(FULL) // FULL, PARTIAL, SINGLE
+  duration    Int?        // in milliseconds
+  startedAt   DateTime    @default(now())
+  completedAt DateTime?
+  
+  workflowId  String
+  workflow    Workflow    @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  nodeExecutions NodeExecution[]
+}
+
+model NodeExecution {
+  id          String       @id @default(cuid())
+  nodeId      String       // React Flow node ID
+  nodeType    String       // Type of node (text, uploadImage, llm, etc.)
+  status      RunStatus    @default(PENDING)
+  inputs      Json?        // Input data for the node
+  outputs     Json?        // Output data from the node
+  error       String?      // Error message if failed
+  duration    Int?         // in milliseconds
+  startedAt   DateTime     @default(now())
+  completedAt DateTime?
+  
+  workflowRunId String
+  workflowRun   WorkflowRun @relation(fields: [workflowRunId], references: [id], onDelete: Cascade)
+}
+
+enum RunStatus {
+  PENDING
+  RUNNING
+  SUCCESS
+  FAILED
+  PARTIAL
+}
+
+enum RunScope {
+  FULL    // Entire workflow
+  PARTIAL // Selected nodes
+  SINGLE  // Single node
+}
