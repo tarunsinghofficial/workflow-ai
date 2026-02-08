@@ -20,6 +20,7 @@ import {
   Sparkles,
   LogOut
 } from 'lucide-react';
+import { useClerk } from '@clerk/nextjs';
 
 interface NodeType {
   id: string;
@@ -30,6 +31,7 @@ interface NodeType {
 }
 
 export function LeftSidebar() {
+  const { signOut } = useClerk();
   const [isOpen, setIsOpen] = useState(true);
   const [activeTab, setActiveTab] = useState('portfolio');
   const [searchQuery, setSearchQuery] = useState('');
@@ -111,9 +113,7 @@ export function LeftSidebar() {
         <div className="mt-auto">
           <div className="relative flex items-center group">
             <button
-              onClick={() => {
-                window.location.href = '/api/auth/signout';
-              }}
+              onClick={() => signOut()}
               className="p-3 rounded-md transition-all duration-200 text-[#CDCDCE] hover:bg-red-500/10 hover:text-red-400"
             >
               <LogOut className="w-4.5 h-4.5" />
